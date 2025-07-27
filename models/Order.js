@@ -21,6 +21,7 @@ const TakeawayFormSchema = new mongoose.Schema(
     phone: String,
     pickupTime: String,
     instructions: String,
+    confirmation: String,
   },
   { _id: false }
 );
@@ -35,6 +36,7 @@ const DeliveryFormSchema = new mongoose.Schema(
     city: String,
     postalCode: String,
     instructions: String,
+    confirmation: String,
   },
   { _id: false }
 );
@@ -44,10 +46,25 @@ const SelectedItemsSchema = new mongoose.Schema(
   {
     type: String,
     name: String,
+    flavour: String, // Add this
+    option: String, // Add this
     quantity: Number,
     totalPrice: String,
-    sizes: [String],
-    selectedFlavours: [String],
+    sizes: [
+      {
+        name: String,
+        price: Number,
+        description: String,
+      },
+    ],
+    selectedFlavours: { type: Map, of: [String] },
+    defaultItems: [
+      {
+        name: String,
+        quantity: Number,
+      },
+    ],
+    mealType: String,
   },
   { _id: false }
 );
@@ -70,14 +87,14 @@ const CartItemSchema = new mongoose.Schema(
 // Main Order Schema
 const OrderSchema = new mongoose.Schema({
   // OrderType Can be delivery , takeaway, dinein
-  orderType: { type: String, required: true }, // No enum here
+  orderType: { type: String, required: true },
   orderId: { type: String, required: true },
 
   // For Waiter Orders
   empId: { type: String },
   empName: { type: String },
   tableNo: { type: String },
-  status: { type: String, default: "pending" }, // Removed enum
+  status: { type: String, default: "pending" },
   billing: BillingSchema,
 
   // For Customer Orders
@@ -88,6 +105,6 @@ const OrderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const Order = mongoose.model("Order", OrderSchema);
+const Order = mongoose.model("Orders", OrderSchema);
 
 module.exports = Order;

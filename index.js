@@ -9,7 +9,8 @@ dotenv.config();
 app.use(express.json());
 app.use(
   cors({
-    origin: "*", // Allow all origins
+    origin: [ "http://localhost:3001","http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
