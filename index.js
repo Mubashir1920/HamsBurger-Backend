@@ -9,7 +9,7 @@ dotenv.config();
 app.use(express.json());
 app.use(
   cors({
-    origin: [ "http://localhost:3001","http://localhost:5173"],
+    origin: ["http://localhost:3001", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
@@ -18,15 +18,14 @@ const PORT = process.env.PORT || 3000;
 const MONGOURL = process.env.MONGO_URL;
 
 const orderRoutes = require("./routes/Order");
-
-// Middleware
+const userRoutes = require("./routes/User");
 
 // Routes
 app.use("/api/order", orderRoutes);
+app.use("/api/user", userRoutes);
 
 // Routes
-app.get("/api", (req, res) => {
-  // console.log("API is running");
+app.get("/", (req, res) => {
   res.send("Welcome to the HAMSBURGER App API!");
 });
 

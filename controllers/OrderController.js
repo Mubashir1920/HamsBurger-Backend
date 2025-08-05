@@ -11,6 +11,27 @@ module.exports = {
     });
   },
 
+  getOrderByEmpId: async (req, res) => {
+    const id = req.body.empId;
+    const token = req.header("Authorization")[1].token;
+    const isMatch = jwt.verify(token, process.env.JWT_SECRET);
+    if (!isMatch) {
+      return res.status(402).json({ message: "Unauthorized! Access Denied" });
+    }
+
+    next();
+
+    const Orders = await Order.find({ empId: id });
+
+    if (Orders.length === 0) {
+      return res.status(204).json({ message: "No Orders Found" });
+    }
+
+    return res
+      .status(200)
+      .json({ orders: Orders, message: "Orders Fetched Successfully" });
+  },
+
   // Add a new order
   AddOrder: async (req, res) => {
     const data = req.body;
